@@ -15,25 +15,21 @@
     </div>
     <p class="title">推荐音乐</p>
     <div>
-      <van-cell-group>
-        <van-cell
-          v-for="item in recommendNewMusicList"
-          :key="item.id" center
-          :title="item.name"
-          :label="item.song.artists[0].name+(item.song.alias.length >=1 ?'-'+item.song.alias[0]:'')"
-          >
-          <template v-slot:right-icon>
-            <van-icon name="play-circle-o" size="0.6rem"/>
-          </template>
-        </van-cell>
-      </van-cell-group>
+      <music-item
+        v-for="item in recommendNewMusicList"
+        :key="item.id"
+        :name="item.name"
+        :id="item.id"
+        :albumName="item.song.album.alias[0]"
+        :singerName="item.song.album.artists[0].name"
+      ></music-item>
     </div>
   </div>
 </template>
 
 <script>
 import { recommendSongListAPI, recommendNewMusicAPI } from '../../api'
-
+import MusicItem from '../../components/MusicItem'
 export default {
   name: 'index',
   data () {
@@ -43,11 +39,15 @@ export default {
 
     }
   },
+  components: {
+    MusicItem
+  },
   async created () {
     const res = await recommendSongListAPI({ limit: 6 })
     this.recommendSongList = res.data.result
     const res2 = await recommendNewMusicAPI({ limit: 10 })
     this.recommendNewMusicList = res2.data.result
+    console.log(res2)
   }
 }
 </script>

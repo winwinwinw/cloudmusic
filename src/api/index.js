@@ -19,9 +19,27 @@ export const hotSearchListAPI = () => request({
 })
 
 // 搜索
-export const searchListAPI = ({ keywords }) => request({
+export const searchListAPI = ({
+  keywords,
+  limit,
+  offset
+}) => request({
   url: '/cloudsearch',
   params: {
-    keywords
+    keywords,
+    limit,
+    offset
+  }
+})
+// 获取音乐
+export const getMusicAPI = () => request({
+  url: '/song/url',
+  params: { id: [] }
+})
+// 获取歌词
+export const getLyricsAPI = ({ id }) => request({
+  url: '/lyric',
+  params: {
+    id
   }
 })

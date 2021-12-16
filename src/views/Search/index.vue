@@ -33,35 +33,78 @@
         v-model="loading"
         :finished="finished"
         finished-text="没有更多了"
+        @load="onLoad(kw)"
       >
+        <MusicItem
+          v-for="item in searchList"
+          :key="item.id"
+          :name="item.name"
+          :id="item.id"
+          :albumName="item.alia[0]"
+          :singerName="item.ar[0].name"
+        ></MusicItem>
       </van-list>
     </div>
   </div>
 </template>
 
 <script>
-import { hotSearchListAPI } from '../../api'
+import { hotSearchListAPI, searchListAPI } from '../../api'
+import MusicItem from '../../components/MusicItem'
+
 export default {
   data () {
     return {
       kw: '',
       loading: false,
       finished: false,
-      hotSearchList: []
+      hotSearchList: [],
+      searchList: [],
+      timer: null,
+      page: 1
     }
+  },
+  components: {
+    MusicItem
   },
   async created () {
     const res = await hotSearchListAPI()
     this.hotSearchList = res.data.result.hots
   },
   methods: {
-    searchChangeFn (v) {
-      console.log(v)
+    async searchChangeFn (v) { // 搜索框内容改变时触发,关键词填入时不触发
+      this.page = 1
+      clearTimeout(this.timer)
+      if (v.length === 0) return
+      this.timer = setTimeout(async () => {
+        const res = await this.searchFn(v)
+        this.searchList = res.data.result.songs
+      }, 100)
     },
-    keyWordInputFn (kwInput) {
+    async keyWordInputFn (kwInput) { // 关键词填入
+      this.page = 1
       this.kw = kwInput
+      const res = await this.searchFn(kwInput)
+      this.searchList = res.data.result.songs
+    },
+    async searchFn (keyWord) {
+      return await searchListAPI({
+        keywords: keyWord,
+        limit: 20,
+        offset: (this.page - 1) * 20
+      })
+    },
+
+    async onLoad (keyWord) {
+      this.page++
+      const res = await this.searchFn(keyWord)
+      console.log(res)
+      this.searchList = [...this.searchList, ...res.data.result.songs]
+      console.log(this.searchList)
+      this.loading = false
     }
   }
+
 }
 </script>
 
