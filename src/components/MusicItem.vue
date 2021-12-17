@@ -7,7 +7,7 @@
       :label="singerName+(albumName !== undefined ?'-'+albumName:'')"
     >
       <template v-slot:right-icon>
-        <van-icon name="play-circle-o" size="0.6rem"/>
+        <van-icon name="play-circle-o" size="0.6rem" @click="playMusicFn"/>
       </template>
     </van-cell>
   </van-cell-group>
@@ -19,9 +19,17 @@ export default {
   name: 'MusicItem',
   props: {
     name: String, // 歌名
-    id: Number, // ID
+    id: Number, // 音乐ID
     albumName: String, // 专辑名
     singerName: String // 歌手名
+  },
+  methods: {
+    playMusicFn () {
+      this.$router.push({
+        path: '/play',
+        query: { id: this.id }
+      })
+    }
   }
 }
 </script>

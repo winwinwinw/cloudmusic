@@ -32,9 +32,8 @@ export const searchListAPI = ({
   }
 })
 // 获取音乐
-export const getMusicAPI = () => request({
-  url: '/song/url',
-  params: { id: [] }
+export const getMusicAPI = ({ id }) => request({
+  url: `/song/detail?ids=${id}`
 })
 // 获取歌词
 export const getLyricsAPI = ({ id }) => request({
