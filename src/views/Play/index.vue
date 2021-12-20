@@ -1,11 +1,13 @@
 <template>
   <div class="play">
+    <!-- 模糊背景(靠样式设置), && 有属性继续用, 固定定位 -->
     <div
       class="song-bg"
       :style="`background-image: url(${
         songInfo && songInfo.al && songInfo.al.picUrl
       }`"
     ></div>
+    <!-- 播放页头部导航 -->
     <div class="header">
       <van-icon
         name="arrow-left"
@@ -14,16 +16,18 @@
         @click="$router.back()"
       />
     </div>
+    <!-- 播放页内容容器 -->
     <div class="song-wrapper">
       <div
         class="song-turn ani"
-        :style="`animation-play-state:${playState ? 'running' : 'paused'}`">
+        :style="`animation-play-state:${playState ? 'running' : 'paused'}`"
+      >
         <div class="song-img">
           <img
             style="width: 100%"
             :src="`${
               songInfo && songInfo.al && songInfo.al.picUrl
-            }`"
+            }?imageView&thumbnail=360y360&quality=75&tostatic=0`"
             alt=""
           />
         </div>
@@ -32,9 +36,24 @@
       <div class="start-box" @click="audioStart">
         <span class="song-start" v-show="!playState"></span>
       </div>
-
+      <!-- 播放歌词 -->
+      <div class="song-msg">
+        <h2 class="m-song-h2">
+          <span class="m-song-sname"
+          >{{ songInfo.name }}-{{
+              songInfo && songInfo.ar && songInfo.ar[0].name
+            }}</span
+          >
+        </h2>
+        <div class="lrcContent">
+          <p class="lrc">{{ curLyric }}</p>
+        </div>
+      </div>
+      <div class="needle" :style="`transform: rotate(${needleDeg});`"></div>
     </div>
-
+    <!-- 播放音乐真正的标签
+      看接口文档: 音乐地址需要带id去获取(但是有的歌曲可能404)
+     -->
     <audio
       ref="audio"
       preload="true"
@@ -42,9 +61,9 @@
     ></audio>
   </div>
 </template>
-
 <script>
-import { getMusicAPI } from '../../api'
+// 获取歌曲详情和 歌曲的歌词接口
+import { getMusicAPI, getLyricsAPI } from '../../api'
 import { Icon } from 'vant'
 
 export default {
@@ -56,16 +75,48 @@ export default {
     return {
       playState: false,
       id: this.$route.query.id,
-      songInfo: {} // 歌曲信息
+      songInfo: {}, // 歌曲信息
+      lyric: {}, // 歌词枚举对象
+      curLyric: '', // 当前显示歌词
+      lastLy: '' // 记录当前播放歌词
     }
   },
-
+  computed: {
+    needleDeg () {
+      return this.playState ? '-7deg' : '-38deg'
+    }
+  },
   methods: {
     async getSong () {
-      const res = await getMusicAPI({ id: this.id })
+      const res = await getMusicAPI({
+        id: this.id
+      })
+      console.log(res)
       this.songInfo = res.data.songs[0]
+      // 处理歌词
+      const lyrContent = await getLyricsAPI({
+        id: this.id
+      })
+      const lyricStr = lyrContent.data.lrc.lyric
+      this.lyric = this._formatLyr(lyricStr)
+      // 初始化完毕先显示零秒歌词
+      this.curLyric = this.lyric[0]
     },
-
+    _formatLyr (lyricStr) {
+      const reg = /\[.+?\]/g
+      const timeArr = lyricStr.match(reg)
+      const contentArr = lyricStr.split(/\[.+?\]/).slice(1)
+      const lyricObj = {}
+      timeArr.forEach((item, index) => {
+        const ms = item.split(':')[0].split('')[2] * 60
+        const ss = item.split(':')[1].split('.')[0].split('')[0] === '0' ? item.split(':')[1].split('.')[0].split('')[1] : item.split(':')[1].split('.')[0]
+        lyricObj[ms + Number(ss)] = contentArr[index]
+      })
+      // 返回得到歌词对象
+      // key是秒, value是显示的歌词
+      console.log(lyricObj)
+      return lyricObj
+    },
     audioStart () {
       if (!this.playState) {
         this.$refs.audio.play()
@@ -73,20 +124,32 @@ export default {
         this.$refs.audio.pause()
       }
       this.playState = !this.playState
+    },
+    showLyric () {
+      // 监听播放audio进度, 切换歌词显示
+      this.$refs.audio.addEventListener('timeupdate', () => {
+        const curTime = Math.floor(this.$refs.audio.currentTime)
+        // 避免空白出现
+        if (this.lyric[curTime]) {
+          this.curLyric = this.lyric[curTime]
+          this.lastLy = this.curLyric
+        } else {
+          this.curLyric = this.lastLy
+        }
+      })
     }
-
   },
   mounted () {
     this.getSong()
+    this.showLyric()
+    console.log(this.$route.query.id)
   }
 }
 </script>
-
 <style scoped>
 .header {
   height: 50px;
 }
-
 .play {
   position: fixed;
   top: 0;
@@ -95,7 +158,6 @@ export default {
   bottom: 0;
   z-index: 1000;
 }
-
 .song-bg {
   background-color: #161824;
   background-position: 50%;
@@ -133,18 +195,17 @@ export default {
   transform: translateX(-50%);
   z-index: 10001;
 }
-
 .song-turn {
   width: 100%;
   height: 100%;
   background: url("./img/bg.png") no-repeat;
   background-size: 100%;
 }
-
 .start-box {
   position: absolute;
   width: 156px;
   height: 156px;
+  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -160,6 +221,18 @@ export default {
   background-size: 100%;
 }
 
+.needle {
+  position: absolute;
+  transform-origin: left top;
+  background: url("./img/needle-ab.png") no-repeat;
+  background-size: contain;
+  width: 73px;
+  height: 118px;
+  top: -40px;
+  left: 112px;
+  transition: all 0.6s;
+}
+
 .song-img {
   width: 154px;
   height: 154px;
@@ -169,6 +242,26 @@ export default {
   overflow: hidden;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+}
+
+.m-song-h2 {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #fefefe;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lrcContent {
+  margin-top: 50px;
+}
+
+.lrc {
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
 }
 
 .left-incon {
@@ -183,7 +276,6 @@ export default {
 .ani {
   animation: turn 5s linear infinite;
 }
-
 @keyframes turn {
   0% {
     -webkit-transform: rotate(0deg);
