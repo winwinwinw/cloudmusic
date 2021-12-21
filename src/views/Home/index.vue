@@ -3,7 +3,6 @@
     <p class="title">热门推荐</p>
     <div>
       <van-row gutter="6">
-        <!--        van-row和van-col用的是vant组件库里的layout布局-->
         <van-col span="8" v-for="obj in recommendSongList" :key="obj.id" @click="songListFn(obj.id)">
           <van-image
             width="100%"
@@ -16,10 +15,9 @@
     </div>
     <p class="title">推荐音乐</p>
     <div>
-      <!--      musicItem是公共组件   name:歌曲名 id:歌曲id albumName:专辑名  singerName:歌手名-->
       <music-item
-        v-for="item in recommendNewMusicList"
-        :key="item.id"
+        v-for="(item,index) in recommendNewMusicList"
+        :key="index"
         :name="item.name"
         :id="item.id"
         :albumName="item.song.album.alias[0]"

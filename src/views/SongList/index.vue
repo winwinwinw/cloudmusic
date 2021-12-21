@@ -10,8 +10,8 @@
     />
   </div>
 <MusicItem
-  v-for="item in songList"
-  :key="item.id"
+  v-for="(item,index) in songList"
+  :key="index"
   :name="item.al.name"
   :id="item.al.id"
   :albumName="item.alia[0]"

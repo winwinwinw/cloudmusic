@@ -37,8 +37,8 @@
         offset="30"
       >
         <MusicItem
-          v-for="item in searchList"
-          :key="item.id"
+          v-for="(item,index) in searchList"
+          :key="index"
           :name="item.name"
           :id="item.id"
           :albumName="item.alia[0]"
@@ -59,11 +59,6 @@ export default {
       kw: '', // 输入框中的关键词
       loading: false,
       finished: false,
-      /* List 组件通过 loading 和 finished 两个变量控制加载状态，
-      当组件滚动到底部时，会触发 load 事件并将 loading 设置成 true。
-      此时可以发起异步操作并更新数据，
-      数据更新完毕后，将 loading 设置成 false 即可。
-      若数据已全部加载完毕，则直接将 finished 设置成 true 即可。 */
       hotSearchList: [], // 热搜列表
       searchList: [], // 搜索列表
       timer: null, // 用来清除定时器
@@ -75,7 +70,7 @@ export default {
   },
   async created () {
     const res = await hotSearchListAPI()
-    this.hotSearchList = res.data.result.hots // 在创建阶段调用该方法(hotSearchListAPI)获取热搜列表
+    this.hotSearchList = res.data.result.hots
   },
   methods: {
     async searchChangeFn () { // 搜索框内容改变时触发,关键词填入时不触发
@@ -86,9 +81,10 @@ export default {
         this.searchList = []
         return
       }
-      this.timer = setTimeout(async () => { // 设置定时器:防止短时间内多次发送请求
+      this.timer = setTimeout(async () => {
         const res = await this.searchFn() // 获取搜索列表
         this.searchList = res.data.result.songs
+        console.log(res)
       }, 100)
     },
     async keyWordInputFn (kwInput) { // 关键词填入
@@ -99,17 +95,18 @@ export default {
       this.searchList = res.data.result.songs
     },
     async searchFn () { // 因为要多次调用,所以将searchListAPI封装
-      return await searchListAPI({ // 在调用searchListAPI之后会返回一个promise对象,所以需要return
+      return await searchListAPI({
         keywords: this.kw,
         limit: 10,
-        offset: (this.page - 1) * 10 // 偏移量,用来控制页数 (this.page - 1) * 10 为固定公式
+        offset: (this.page - 1) * 10
       })
     },
-    async onLoad (keyWord) { // 向下滚动时触发滚动事件 并使页数加一 在重新调用searchListAPI 更新搜索列表
+    async onLoad (keyWord) {
       this.page++
       const res = await this.searchFn(keyWord)
-      if (this.searchList.length + 30 >= res.data.result.songCount) { // 获取搜索的歌曲最多为300,当搜索列表的长度更新到300之后会出现key值重复的情况,所以提前结束更新
+      if (this.searchList.length + 10 >= res.data.result.songCount) {
         this.finished = true
+        return
       }
       this.searchList = [...this.searchList, ...res.data.result.songs] // 将新数据与旧数据合并
       this.loading = false
