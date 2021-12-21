@@ -19,7 +19,7 @@ export default {
   name: 'MusicItem',
   props: {
     name: String, // 歌名
-    id: Number, // 音乐ID
+    id: [Number, String], // 音乐ID
     albumName: String, // 专辑名
     singerName: String // 歌手名
   },

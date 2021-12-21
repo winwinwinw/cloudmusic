@@ -12,7 +12,7 @@
       <van-icon
         name="arrow-left"
         size="20"
-        class="left-incon"
+        class="left-icon"
         @click="$router.back()"
       />
     </div>
@@ -91,7 +91,6 @@ export default {
       const res = await getMusicAPI({
         id: this.id
       })
-      console.log(res)
       this.songInfo = res.data.songs[0]
       // 处理歌词
       const lyrContent = await getLyricsAPI({
@@ -102,7 +101,7 @@ export default {
       // 初始化完毕先显示零秒歌词
       this.curLyric = this.lyric[0]
     },
-    _formatLyr (lyricStr) {
+    _formatLyr (lyricStr) { // 处理歌词
       const reg = /\[.+?\]/g
       const timeArr = lyricStr.match(reg)
       const contentArr = lyricStr.split(/\[.+?\]/).slice(1)
@@ -114,7 +113,7 @@ export default {
       })
       // 返回得到歌词对象
       // key是秒, value是显示的歌词
-      console.log(lyricObj)
+      // console.log(lyricObj)
       return lyricObj
     },
     audioStart () {
@@ -128,6 +127,7 @@ export default {
     showLyric () {
       // 监听播放audio进度, 切换歌词显示
       this.$refs.audio.addEventListener('timeupdate', () => {
+        // console.log(this.$refs.audio.currentTime)
         const curTime = Math.floor(this.$refs.audio.currentTime)
         // 避免空白出现
         if (this.lyric[curTime]) {
@@ -264,7 +264,7 @@ export default {
   text-align: center;
 }
 
-.left-incon {
+.left-icon {
   position: absolute;
   top: 10px;
   left: 10px;

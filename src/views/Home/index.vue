@@ -3,18 +3,20 @@
     <p class="title">热门推荐</p>
     <div>
       <van-row gutter="6">
-      <van-col span="8" v-for="obj in recommendSongList" :key="obj.id">
-        <van-image
-          width="100%"
-          height="3rem"
-          :src="obj.picUrl"
-        />
-        <p class="song_name">{{obj.name}}</p>
-      </van-col>
-    </van-row>
+        <!--        van-row和van-col用的是vant组件库里的layout布局-->
+        <van-col span="8" v-for="obj in recommendSongList" :key="obj.id" @click="songListFn(obj.id)">
+          <van-image
+            width="100%"
+            height="3rem"
+            :src="obj.picUrl"
+          />
+          <p class="song_name">{{ obj.name }}</p>
+        </van-col>
+      </van-row>
     </div>
     <p class="title">推荐音乐</p>
     <div>
+      <!--      musicItem是公共组件   name:歌曲名 id:歌曲id albumName:专辑名  singerName:歌手名-->
       <music-item
         v-for="item in recommendNewMusicList"
         :key="item.id"
@@ -34,9 +36,8 @@ export default {
   name: 'index',
   data () {
     return {
-      recommendSongList: [],
-      recommendNewMusicList: []
-
+      recommendSongList: [], // 推荐歌单
+      recommendNewMusicList: [] // 推荐歌曲列表
     }
   },
   components: {
@@ -47,7 +48,15 @@ export default {
     this.recommendSongList = res.data.result
     const res2 = await recommendNewMusicAPI({ limit: 10 })
     this.recommendNewMusicList = res2.data.result
-    console.log(res2)
+    console.log(res)
+  },
+  methods: {
+    songListFn (songListID) {
+      this.$router.push({
+        path: '/songList',
+        query: { songListID }
+      })
+    }
   }
 }
 </script>

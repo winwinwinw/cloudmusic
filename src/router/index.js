@@ -4,7 +4,7 @@ import Layout from '../views/Layout'
 import Play from '../views/Play'
 import Search from '../views/Search'
 import Home from '../views/Home'
-
+import SongList from '../views/SongList'
 Vue.use(VueRouter)
 
 const routes = [
@@ -39,6 +39,11 @@ const routes = [
     path: '/play',
     name: 'Play',
     component: Play
+  },
+  {
+    path: '/songList',
+    name: 'SongList',
+    component: SongList
   }
 ]
 
