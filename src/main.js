@@ -4,8 +4,9 @@ import router from './router'
 import store from './store'
 import './mobile/flexible.js'
 import './styles/reset.css'
-import { Tabbar, TabbarItem, NavBar, Col, Row, Image as VanImage, Cell, CellGroup, Icon, Search, List } from 'vant'
+import { Tabbar, TabbarItem, NavBar, Col, Row, Image as VanImage, Cell, CellGroup, Icon, Search, List, Overlay } from 'vant'
 
+Vue.use(Overlay)
 Vue.use(List)
 Vue.use(Search)
 Vue.use(Icon)

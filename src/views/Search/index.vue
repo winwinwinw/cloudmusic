@@ -1,29 +1,38 @@
 <template>
   <div>
+    <van-nav-bar
+      :title="$route.meta.title"
+      fixed
+    >
+      <template #left>
+        <van-icon name="arrow-left" size="0.7rem" color="#000" @click="$router.replace('/layout/home')"/>
+      </template>
+    </van-nav-bar>
     <div>
       <van-search
         v-model="kw"
-        placeholder="请输入搜索关键词"
+        :placeholder="searchHotVal"
         show-action
         @cancel="kw=''"
         @input="searchChangeFn"
+        @search="kw=searchHotVal"
       />
     </div>
 
     <!-- 搜索容器 -->
-      <div class="search_wrap" v-if="kw.length === 0 || hotSearchList.length === 0">
-        <!-- 标题 -->
-        <p class="hot_title">热门搜索</p>
-        <!-- 热搜关键词容器 -->
-        <div class="hot_name_wrap">
-          <!-- 每个搜索关键词 -->
-          <span
-            class="hot_item"
-            v-for="(hots,index) in hotSearchList"
-            :key="index"
-            @click="keyWordInputFn(hots.first) "
-          >{{ hots.first}}</span>
-        </div>
+    <div class="search_wrap" v-if="kw.length === 0 || hotSearchList.length === 0">
+      <!-- 标题 -->
+      <p class="hot_title">热门搜索</p>
+      <!-- 热搜关键词容器 -->
+      <div class="hot_name_wrap">
+        <!-- 每个搜索关键词 -->
+        <span
+          class="hot_item"
+          v-for="(hots,index) in hotSearchList"
+          :key="index"
+          @click="keyWordInputFn(hots.first) "
+        >{{ hots.first }}</span>
+      </div>
     </div>
     <!-- 搜索结果 -->
     <div class="search_wrap" v-else>
@@ -62,7 +71,8 @@ export default {
       hotSearchList: [], // 热搜列表
       searchList: [], // 搜索列表
       timer: null, // 用来清除定时器
-      page: 1 // 页数,默认为1页
+      page: 1, // 页数,默认为1页
+      searchHotVal: this.$route.query.searchHotVal// 推荐热搜关键词
     }
   },
   components: {
@@ -117,6 +127,7 @@ export default {
 </script>
 
 <style scoped>
+
 /* 搜索容器的样式 */
 .search_wrap {
   padding: 10px;

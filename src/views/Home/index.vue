@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div>
+      <van-search
+        :placeholder="searchHotVal"
+
+        @focus="enterSearchFn(searchHotVal)"
+      />
+    </div>
     <p class="title">热门推荐</p>
     <div>
       <van-row gutter="6">
@@ -28,14 +35,18 @@
 </template>
 
 <script>
-import { recommendSongListAPI, recommendNewMusicAPI } from '../../api'
+import { recommendSongListAPI, recommendNewMusicAPI, hotSearchListAPI } from '../../api'
 import MusicItem from '../../components/MusicItem'
 export default {
   name: 'index',
   data () {
     return {
       recommendSongList: [], // 推荐歌单
-      recommendNewMusicList: [] // 推荐歌曲列表
+      recommendNewMusicList: [], // 推荐歌曲列表
+      hotSearchList: [], // 热搜列表
+      placeholderHot: '', // 推荐的热搜词
+      hotSearchID: Math.floor(Math.random() * 10), // 记录热搜词轮换位置
+      time: null
     }
   },
   components: {
@@ -46,7 +57,11 @@ export default {
     this.recommendSongList = res.data.result
     const res2 = await recommendNewMusicAPI({ limit: 10 })
     this.recommendNewMusicList = res2.data.result
-    console.log(res)
+    const searchHot = await hotSearchListAPI()
+    console.log(searchHot)
+    this.hotSearchList = searchHot.data.result.hots
+    this.searchTermRotation()
+    this.placeholderHot = this.hotSearchList[this.hotSearchID].first
   },
   methods: {
     songListFn (songListID) {
@@ -54,6 +69,35 @@ export default {
         path: '/songList',
         query: { songListID }
       })
+    },
+    // 热搜词轮换
+    searchTermRotation () {
+      clearInterval(this.time)
+      this.time = setInterval(() => {
+        this.hotSearchID++
+        if (this.hotSearchID > 9) {
+          this.hotSearchID = 0
+        }
+        this.placeholderHot = this.hotSearchList[this.hotSearchID].first
+      }, 4000)
+    },
+    // 进入搜索界面
+    enterSearchFn (searchHotVal) {
+      clearInterval(this.time)
+      this.$router.push({
+        path: '/layout/search',
+        query: {
+          searchHotVal
+
+        }
+      })
+    }
+  },
+  computed: {
+    searchHotVal: {
+      get () {
+        return this.placeholderHot
+      }
     }
   }
 }
@@ -64,9 +108,9 @@ export default {
 .title {
   padding: 10px 9px;
   margin: 0 0 9px 0;
-  background-color: #eee;
+  background-color: rgba(255, 255, 255, 0.5);
   color: #333;
-  font-size:18px;
+  font-size: 18px;
 }
 /* 推荐歌单 - 歌名 */
 .song_name {
