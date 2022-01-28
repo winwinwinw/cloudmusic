@@ -7,7 +7,7 @@ import Home from '../views/Home'
 import SongList from '../views/SongList'
 import Mine from '../views/Mine'
 import Broadcasting from '../views/Broadcasting'
-
+import Login from '../views/Login'
 Vue.use(VueRouter)
 
 const routes = [
@@ -15,7 +15,14 @@ const routes = [
     path: '/',
     redirect: '/layout'
   },
-
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: {
+      title: '登陆'
+    }
+  },
   {
     path: '/layout',
     name: 'Layout',

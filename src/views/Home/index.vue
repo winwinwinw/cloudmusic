@@ -7,7 +7,20 @@
         @focus="enterSearchFn(searchHotVal)"
       />
     </div>
-    <p class="title">热门推荐</p>
+    <!--    轮播图 s-->
+    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+      <van-swipe-item>
+        广告1
+      </van-swipe-item>
+      <van-swipe-item>
+        广告2
+      </van-swipe-item>
+      <van-swipe-item>
+        广告3
+      </van-swipe-item>
+    </van-swipe>
+    <!--    轮播图 e-->
+    <p class="title">推荐歌单</p>
     <div>
       <van-row gutter="6">
         <van-col span="8" v-for="obj in recommendSongList" :key="obj.id" @click="songListFn(obj.id)">
@@ -58,7 +71,6 @@ export default {
     const res2 = await recommendNewMusicAPI({ limit: 10 })
     this.recommendNewMusicList = res2.data.result
     const searchHot = await hotSearchListAPI()
-    console.log(searchHot)
     this.hotSearchList = searchHot.data.result.hots
     this.searchTermRotation()
     this.placeholderHot = this.hotSearchList[this.hotSearchID].first
@@ -123,5 +135,14 @@ export default {
   -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
   -webkit-line-clamp: 2; /** 显示的行数 **/
   overflow: hidden; /** 隐藏超出的内容 **/
+}
+
+/*轮播图样式*/
+.my-swipe .van-swipe-item {
+  color: #fff;
+  font-size: 20px;
+  line-height: 150px;
+  text-align: center;
+  background-color: #39a9ed;
 }
 </style>
