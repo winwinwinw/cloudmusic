@@ -18,8 +18,12 @@ import {
   , Lazyload
   , Form, Field
   , Sticky
+  , Notify
+  , Toast
 } from 'vant'
 
+Vue.use(Toast)
+Vue.use(Notify)
 Vue.use(Sticky)
 Vue.use(Form)
 Vue.use(Field)

@@ -37,6 +37,7 @@
 
 <script>
 import { loginPWAPI } from '../../api'
+import { DNotify } from '../../utils/notify'
 
 export default {
   name: 'login',
@@ -50,12 +51,27 @@ export default {
   },
   methods: {
     async onSubmit (values) {
-      // console.log('submit', values)
-      const res = await loginPWAPI({
-        phone: this.formLogin.username,
-        password: this.formLogin.password
-      })
-      console.log(res)
+      console.log('submit', values)
+      try {
+        const res = await loginPWAPI({
+          phone: this.formLogin.username,
+          password: this.formLogin.password
+        })
+        // this.$router.replace({
+        //   path: '/layout'
+        // })
+        console.log(res)
+        DNotify({
+          type: 'success',
+          message: '登陆成功'
+        })
+      } catch (err) {
+        // 账号输入错误
+        DNotify({
+          message: '手机号未注册'
+        })
+        console.log(err)
+      }
     }
   }
 }
