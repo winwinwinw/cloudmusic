@@ -68,7 +68,7 @@ export default {
       } catch (err) {
         // 账号输入错误
         DNotify({
-          message: '手机号未注册'
+          message: '手机号或密码错误'
         })
         console.log(err)
       }
