@@ -43,10 +43,12 @@ export const getLyricsAPI = ({ id }) => request({
 
 // 获取歌单列表
 export const getSongListAPI = ({
-  songListId
+  songListId,
+  limit
 }) => request({
   url: '/playlist/track/all',
   params: {
-    id: songListId
+    id: songListId,
+    limit: 10
   }
 })

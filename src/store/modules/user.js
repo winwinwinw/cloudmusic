@@ -13,7 +13,8 @@ const state = defaultState()
 
 const mutations = {
   RESET_STATE: (state) => {
-    state = { ...defaultState() }
+    // state = { ...defaultState() }
+    Object.assign(state, defaultState())
   },
   SET_TOKEN (state, newToken) {
     state.token = newToken
@@ -32,7 +33,7 @@ const actions = {
     const res = await loginPWAPI(value)
     if (res.data.code === 200) {
       commit('SET_USER', res.data)
-      commit('SET_TOKEN', res.data.token, res.data)
+      commit('SET_TOKEN', res.data.token)
     }
     return res
   },

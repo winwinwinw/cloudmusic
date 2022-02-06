@@ -9,14 +9,8 @@
     </div>
     <!--    轮播图 s-->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item>
-        广告1
-      </van-swipe-item>
-      <van-swipe-item>
-        广告2
-      </van-swipe-item>
-      <van-swipe-item>
-        广告3
+      <van-swipe-item v-for="(image, index) in images" :key="index">
+        <img v-lazy="image" alt="" style="width: 100%;height: 100%;"/>
       </van-swipe-item>
     </van-swipe>
     <!--    轮播图 e-->
@@ -24,11 +18,19 @@
     <div>
       <van-row gutter="6">
         <van-col span="8" v-for="obj in recommendSongList" :key="obj.id" @click="songListFn(obj.id)">
-          <van-image
-            width="100%"
-            height="3rem"
-            :src="obj.picUrl"
-          />
+          <div class="songListImg">
+            <van-image
+              width="100%"
+              height="3rem"
+              :src="obj.picUrl"
+            />
+            <div class="playCount">
+              <van-icon name="service-o" size="10"/>
+              <span>
+                {{ Math.floor(obj.playCount / 10000) }}万
+              </span>
+            </div>
+          </div>
           <p class="song_name">{{ obj.name }}</p>
         </van-col>
       </van-row>
@@ -56,10 +58,16 @@ export default {
     return {
       recommendSongList: [], // 推荐歌单
       recommendNewMusicList: [], // 推荐歌曲列表
+      playCount: 0,
       hotSearchList: [], // 热搜列表
       placeholderHot: '', // 推荐的热搜词
       hotSearchID: Math.floor(Math.random() * 10), // 记录热搜词轮换位置
-      time: null
+      time: null,
+      images: [
+        'https://w.wallhaven.cc/full/3z/wallhaven-3zwkz9.jpg',
+        'https://img01.yzcdn.cn/vant/apple-1.jpg',
+        'https://img01.yzcdn.cn/vant/apple-2.jpg'
+      ]
     }
   },
   components: {
@@ -77,10 +85,10 @@ export default {
   },
   methods: {
     songListFn (songListID) {
-      this.$router.push({
-        path: '/songList',
-        query: { songListID }
-      })
+      // this.$router.push({
+      //   path: '/songList',
+      //   query: { songListID }
+      // })
     },
     // 热搜词轮换
     searchTermRotation () {
@@ -115,7 +123,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* 标题 */
 .title {
   padding: 10px 9px;
@@ -124,6 +132,7 @@ export default {
   color: #333;
   font-size: 18px;
 }
+
 /* 推荐歌单 - 歌名 */
 .song_name {
   font-size: 13px;
@@ -137,12 +146,35 @@ export default {
   overflow: hidden; /** 隐藏超出的内容 **/
 }
 
+.songListImg {
+  position: relative;
+  top: 0;
+
+  .playCount {
+    height: 12%;
+    font-size: 12px;
+    line-height: 12px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    color: #eee;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    display: flex;
+
+  }
+
+}
+
 /*轮播图样式*/
-.my-swipe .van-swipe-item {
+
+.van-swipe-item {
   color: #fff;
+  height: 4rem;
   font-size: 20px;
-  line-height: 150px;
+  line-height: 0;
   text-align: center;
   background-color: #39a9ed;
 }
+
 </style>

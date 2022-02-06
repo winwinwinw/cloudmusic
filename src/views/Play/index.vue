@@ -64,7 +64,6 @@ import { getMusicAPI, getLyricsAPI } from '../../api'
 import { Icon } from 'vant'
 
 export default {
-
   components: {
     [Icon.name]: Icon
   },
@@ -95,6 +94,7 @@ export default {
       const lyrContent = await getLyricsAPI({
         id: this.id
       })
+      console.log(res)
       const lyricStr = lyrContent.data.lrc.lyric
       this.lyric = this._formatLyr(lyricStr)
       // 初始化完毕先显示零秒歌词
