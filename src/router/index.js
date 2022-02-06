@@ -81,10 +81,14 @@ const routes = [
 
 ]
 
-const router = new VueRouter({
+const createRouter = () => new VueRouter({
   routes
 })
+const router = createRouter()
 // router.beforeEach((to, from, next) => {
 //   // ...
 // })
+export function resetRouter () {
+  router.matcher = createRouter().matcher
+}
 export default router

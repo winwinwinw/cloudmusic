@@ -51,12 +51,9 @@
       </div>
       <div class="needle" :style="`transform: rotate(${needleDeg});`"></div>
     </div>
-    <!-- 播放音乐真正的标签
-      看接口文档: 音乐地址需要带id去获取(但是有的歌曲可能404)
-     -->
     <audio
       ref="audio"
-      preload="true"
+      preload="metadata"
       :src="`https://music.163.com/song/media/outer/url?id=${id}.mp3`"
     ></audio>
   </div>
@@ -67,6 +64,7 @@ import { getMusicAPI, getLyricsAPI } from '../../api'
 import { Icon } from 'vant'
 
 export default {
+
   components: {
     [Icon.name]: Icon
   },
@@ -78,7 +76,8 @@ export default {
       songInfo: {}, // 歌曲信息
       lyric: {}, // 歌词枚举对象
       curLyric: '', // 当前显示歌词
-      lastLy: '' // 记录当前播放歌词
+      lastLy: '', // 记录当前播放歌词
+      audioEvent: null
     }
   },
   computed: {
@@ -126,7 +125,7 @@ export default {
     },
     showLyric () {
       // 监听播放audio进度, 切换歌词显示
-      this.$refs.audio.addEventListener('timeupdate', () => {
+      this.audioEvent = () => {
         // console.log(this.$refs.audio.currentTime)
         const curTime = Math.floor(this.$refs.audio.currentTime)
         // 避免空白出现
@@ -136,13 +135,20 @@ export default {
         } else {
           this.curLyric = this.lastLy
         }
-      })
+      }
+      this.$refs.audio.addEventListener('timeupdate', this.audioEvent)
     }
   },
   mounted () {
     this.getSong()
     this.showLyric()
     console.log(this.$route.query.id)
+  },
+  beforeRouteLeave (to, from, next) {
+    // 导航离开该组件的对应路由时调用
+    // 可以访问组件实例 `this`
+    this.$refs.audio.removeEventListener('timeupdate', this.audioEvent)
+    next()
   }
 }
 </script>

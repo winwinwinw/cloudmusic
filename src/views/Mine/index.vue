@@ -12,15 +12,19 @@
 </template>
 
 <script>
+
 export default {
   name: 'index',
+
   data () {
     return {
       loginStatus: false
     }
   },
   created () {
-
+    if (!this.loginStatus && this.$store.getters.UserID) {
+      this.loginStatus = true
+    }
   }
 }
 </script>

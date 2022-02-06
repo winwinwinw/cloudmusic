@@ -21,6 +21,11 @@ export const logoutAPI = () => request({ url: '/logout' })
 // 获取登录状态
 export const loginStatusAPI = () => request({ url: '/login/status' })
 // 获取用户详情
-export const userDetailAPI = () => request({ url: '/user/detail' })
+export const userDetailAPI = ({ uid }) => request({
+  url: '/user/detail',
+  params: {
+    uid
+  }
+})
 // 获取账号信息
 export const accountAPI = () => request({ url: '/user/account' })

@@ -28,7 +28,6 @@ newAxios.interceptors.response.use(
   response => {
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
-    console.log(response.data)
     const { code } = response.data
     if (code !== 200) {
       // 登陆失败,密码错误
@@ -37,7 +36,7 @@ newAxios.interceptors.response.use(
       return Promise.reject(response)
     }
     // 登陆成功,设置token
-    setToken(response.data.token)
+    response.data.token && setToken(response.data.token)
     return response
   },
 

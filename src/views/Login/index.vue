@@ -32,12 +32,20 @@
        </div>
      </van-form>
     </van-sticky>
+    <div class="reg">
+      <!-- 临时的!!!!!!!-->
+      <a href="javascript:">注册</a>
+      <span> | </span>
+      <a href="javascript:">找回密码</a>
+    </div>
+    <van-button @click="loginStatusFN" style="margin-top: 300px">清除VueRouter缓存</van-button>
   </div>
 </template>
 
 <script>
-import { loginPWAPI } from '../../api'
+// import { userDetailAPI } from '../../api'
 import { DNotify } from '../../utils/notify'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'login',
@@ -46,21 +54,23 @@ export default {
       formLogin: {
         username: '18324576519',
         password: 'dai20000316'
-      }
+      },
+      uid: 0
     }
   },
   methods: {
+    ...mapActions('user', ['getLoginActions', 'loginOutActions']),
     async onSubmit (values) {
-      console.log('submit', values)
       try {
-        const res = await loginPWAPI({
+        const res = await this.getLoginActions({
           phone: this.formLogin.username,
           password: this.formLogin.password
         })
-        // this.$router.replace({
-        //   path: '/layout'
-        // })
+        this.$router.replace({
+          path: '/layout'
+        })
         console.log(res)
+        this.uid = res.data.account.id
         DNotify({
           type: 'success',
           message: '登陆成功'
@@ -72,6 +82,9 @@ export default {
         })
         console.log(err)
       }
+    },
+    loginStatusFN () {
+      this.loginOutActions()
     }
   }
 }
@@ -80,7 +93,10 @@ export default {
 <style scoped lang="scss">
 .title {
 }
-.loginBox {
-position: relative;
+
+.reg {
+  margin-top: 48px;
+  text-align: center;
+  font-size: 12px;
 }
 </style>
