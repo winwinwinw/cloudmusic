@@ -27,7 +27,7 @@
             style="width: 100%"
             :src="`${
               songInfo && songInfo.al && songInfo.al.picUrl
-            }?imageView&thumbnail=360y360&quality=75&tostatic=0`"
+            }`"
             alt=""
           />
         </div>
@@ -143,7 +143,9 @@ export default {
     this.getSong()
     this.showLyric()
     console.log(this.$route.query.id)
+    console.log(this.$refs.audio.ended)
   },
+
   beforeRouteLeave (to, from, next) {
     // 导航离开该组件的对应路由时调用
     // 可以访问组件实例 `this`
