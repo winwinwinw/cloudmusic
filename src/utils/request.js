@@ -8,7 +8,7 @@ const newAxios = axios.create({
   headers: {},
   params: {},
   data: {},
-  xhrFields: { withCredentials: true },
+  // xhrFields: { withCredentials: true },
   timeout: 5000
 })
 

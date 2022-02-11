@@ -94,7 +94,6 @@ export default {
       const lyrContent = await getLyricsAPI({
         id: this.id
       })
-      console.log(res)
       const lyricStr = lyrContent.data.lrc.lyric
       this.lyric = this._formatLyr(lyricStr)
       // 初始化完毕先显示零秒歌词
@@ -112,7 +111,6 @@ export default {
       })
       // 返回得到歌词对象
       // key是秒, value是显示的歌词
-      // console.log(lyricObj)
       return lyricObj
     },
     audioStart () {
