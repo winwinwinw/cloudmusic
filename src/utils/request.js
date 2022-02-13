@@ -4,7 +4,8 @@ import { setToken } from './auth'
 // import { DNotify } from './notify'
 
 const newAxios = axios.create({
-  baseURL: 'http://121.40.228.138:3000/', // 基地址
+  // baseURL: 'http://121.40.228.138:3000/', // 基地址
+  baseURL: 'https://netease-cloud-music-api-ochre-alpha.vercel.app/', // 基地址
   headers: {},
   params: {},
   data: {},
