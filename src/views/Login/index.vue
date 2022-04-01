@@ -44,7 +44,8 @@
 
 <script>
 // import { userDetailAPI } from '../../api'
-import { DNotify } from '../../utils/notify'
+import MD5 from 'MD5'
+import { DNotify } from '@/utils/notify'
 import { mapActions } from 'vuex'
 
 export default {
@@ -64,12 +65,13 @@ export default {
       try {
         const res = await this.getLoginActions({
           phone: this.formLogin.username,
-          password: this.formLogin.password
+          md5_password: MD5(this.formLogin.password)
         })
         this.$router.replace({
           path: '/layout'
         })
         console.log(res)
+        console.log(this.$store.getters.cookie)
         this.uid = res.data.account.id
         DNotify({
           type: 'success',

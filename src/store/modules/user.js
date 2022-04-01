@@ -1,10 +1,11 @@
 import { getToken, setToken, removeToken } from '../../utils/auth'
 import { loginPWAPI, logoutAPI } from '../../api'
 // import { loginPWAPI, logoutAPI, userDetailAPI } from '../../api'
-import { resetRouter } from '../../router'
+import { resetRouter } from '@/router'
 
 const defaultState = () => {
   return {
+    cookie: '',
     token: getToken() || [],
     userDetail: {} // 用户详情对象
   }
@@ -26,6 +27,12 @@ const mutations = {
   },
   SET_USER (state, value) {
     state.userDetail = value
+  },
+  SET_COOKIE (state, value) {
+    state.cookie = encodeURIComponent(value)
+  },
+  REMOVE_COOKIE (state) {
+    state.cookie = ''
   }
 }
 const actions = {
@@ -34,6 +41,7 @@ const actions = {
     if (res.data.code === 200) {
       commit('SET_USER', res.data)
       commit('SET_TOKEN', res.data.token)
+      commit('SET_COOKIE', res.data.cookie)
     }
     return res
   },
@@ -45,6 +53,7 @@ const actions = {
   loginOutActions ({ commit }) {
     commit('RESET_STATE')
     commit('REMOVE_TOKEN')
+    commit('REMOVE_COOKIE')
     resetRouter()
     logoutAPI()
   }

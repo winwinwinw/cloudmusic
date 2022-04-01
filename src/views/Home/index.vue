@@ -85,10 +85,10 @@ export default {
   },
   methods: {
     songListFn (songListID) {
-      // this.$router.push({
-      //   path: '/songList',
-      //   query: { songListID }
-      // })
+      this.$router.push({
+        path: '/songList',
+        query: { songListID }
+      })
     },
     // 热搜词轮换
     searchTermRotation () {

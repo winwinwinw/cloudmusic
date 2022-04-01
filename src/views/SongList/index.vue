@@ -12,11 +12,19 @@
 <MusicItem
   v-for="(item,index) in songList"
   :key="index"
-  :name="item.al.name"
-  :id="item.al.id"
+  :name="item.name"
+  :id="item.id"
   :albumName="item.alia[0]"
   :singerName="item.ar[0].name"
 ></MusicItem>
+  <!--  <MusicItem-->
+  <!--  v-for="(item,index) in songList"-->
+  <!--  :key="index"-->
+  <!--  :name="item.al.name"-->
+  <!--  :id="item.al.id"-->
+  <!--  :albumName="item.alia[0]"-->
+  <!--  :singerName="item.ar[0].name"-->
+  <!--&gt;</MusicItem>-->
 </div>
 </template>
 

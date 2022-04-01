@@ -53,7 +53,8 @@
     </div>
     <audio
       ref="audio"
-      preload="metadata"
+      preload="auto"
+      autoplay
       :src="`https://music.163.com/song/media/outer/url?id=${id}.mp3`"
     ></audio>
   </div>
@@ -115,9 +116,17 @@ export default {
     },
     audioStart () {
       if (!this.playState) {
-        this.$refs.audio.play()
+        try {
+          this.$refs.audio.play()
+        } catch (err) {
+          console.log(err)
+        }
       } else {
-        this.$refs.audio.pause()
+        try {
+          this.$refs.audio.pause()
+        } catch (err) {
+          console.log(err)
+        }
       }
       this.playState = !this.playState
     },

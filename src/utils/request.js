@@ -1,6 +1,7 @@
 // 封装网络请求
 import axios from 'axios'
 import { setToken } from './auth'
+import store from '@/store'
 // import { DNotify } from './notify'
 
 const newAxios = axios.create({
@@ -17,6 +18,8 @@ const newAxios = axios.create({
 newAxios.interceptors.request.use(
   config => {
     // 在发送请求之前做些什么`
+    console.log(config)
+    config.params.cookie = store.getters.cookie
     return config
   },
   error => {
