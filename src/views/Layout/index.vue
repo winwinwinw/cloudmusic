@@ -16,7 +16,7 @@
   <div>
     <van-tabbar route v-model="active">
       <van-tabbar-item replace to="/layout/home" icon="music-o">音乐</van-tabbar-item>
-      <van-tabbar-item replace to="/layout/broadcasting" icon="service-o">电台</van-tabbar-item>
+      <!--<van-tabbar-item replace to="/layout/broadcasting" icon="service-o">电台</van-tabbar-item>-->
       <van-tabbar-item replace to="/layout/mine" icon="contact">我的</van-tabbar-item>
     </van-tabbar>
   </div>
