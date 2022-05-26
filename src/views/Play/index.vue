@@ -54,7 +54,6 @@
     <audio
       ref="audio"
       preload="auto"
-      autoplay
       :src="`https://music.163.com/song/media/outer/url?id=${id}.mp3`"
     ></audio>
   </div>
