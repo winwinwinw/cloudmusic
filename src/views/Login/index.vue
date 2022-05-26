@@ -38,7 +38,6 @@
       <span> | </span>
       <a href="javascript:">找回密码</a>
     </div>
-    <van-button @click="loginStatusFN" style="margin-top: 300px">清除VueRouter缓存</van-button>
   </div>
 </template>
 
