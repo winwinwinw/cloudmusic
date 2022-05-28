@@ -94,7 +94,6 @@ export default {
       this.timer = setTimeout(async () => {
         const res = await this.searchFn() // 获取搜索列表
         this.searchList = res.data.result.songs
-        console.log(res)
       }, 100)
     },
     async keyWordInputFn (kwInput) { // 关键词填入

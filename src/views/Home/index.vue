@@ -61,7 +61,7 @@ export default {
       playCount: 0,
       hotSearchList: [], // 热搜列表
       placeholderHot: '', // 推荐的热搜词
-      hotSearchID: Math.floor(Math.random() * 10), // 记录热搜词轮换位置
+      hotSearchID: Math.floor(Math.random() * 10),
       time: null,
       images: [
         'https://w.wallhaven.cc/full/3z/wallhaven-3zwkz9.jpg',
@@ -108,7 +108,6 @@ export default {
         path: '/layout/search',
         query: {
           searchHotVal
-
         }
       })
     }
