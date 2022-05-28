@@ -89,6 +89,7 @@ export default {
       //   path: '/songList',
       //   query: { songListID }
       // })
+      console.log(songListID)
     },
     // 热搜词轮换
     searchTermRotation () {

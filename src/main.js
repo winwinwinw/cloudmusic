@@ -6,14 +6,14 @@ import './mobile/flexible.js'
 import './styles/reset.css'
 import './vantRegistered.js'
 Vue.config.productionTip = false
-if (process.env.NODE_ENV !== 'development') {
-  console.log = function () {
-  }
-  console.error = function () {
-  }
-  console.dir = function () {
-  }
+// if (process.env.NODE_ENV !== 'development') {
+console.log = function () {
 }
+console.error = function () {
+}
+console.dir = function () {
+}
+// }
 new Vue({
   router,
   store,

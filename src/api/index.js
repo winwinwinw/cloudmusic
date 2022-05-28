@@ -48,7 +48,6 @@ export const getSongListAPI = ({
 }) => request({
   url: '/playlist/track/all',
   params: {
-    id: songListId,
-    limit: 10
+    id: songListId
   }
 })

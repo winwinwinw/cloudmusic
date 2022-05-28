@@ -9,6 +9,7 @@ export const loginPWAPI = ({
   md5_password
 }) => request({
   url: '/login/cellphone',
+  method: 'get',
   params: {
     phone,
     password,

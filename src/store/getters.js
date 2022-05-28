@@ -6,6 +6,7 @@ const getters = {
     return null
   },
   token: state => state.user.token,
+  cookie: state => state.user.cookie,
   nickName: state => {
     if (JSON.stringify(state.user.userDetail) !== '{}') {
       return state.user.userDetail.profile.nickname
